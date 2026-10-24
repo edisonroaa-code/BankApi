@@ -1,0 +1,90 @@
+:root {
+  color-scheme: light;
+}
+
+body {
+  background: #f4f6f8;
+  color: #1f2937;
+}
+
+.header-logo {
+  max-height: 56px;
+  width: auto;
+  object-fit: contain;
+  border-radius: 6px;
+}
+
+.app-card,
+.metric {
+  border: 1px solid #dbe1e8;
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.metric {
+  min-height: 116px;
+  padding: 1rem;
+}
+
+.metric-label {
+  display: block;
+  color: #64748b;
+  font-size: 0.875rem;
+  margin-bottom: 0.5rem;
+}
+
+.metric-value {
+  display: block;
+  color: #111827;
+  font-size: clamp(1.35rem, 2vw, 1.85rem);
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+
+.toast-layer {
+  z-index: 1080;
+}
+
+.table th {
+  white-space: nowrap;
+}
+
+.w-40 {
+  width: 40%;
+}
+
+.table-warning td {
+  background-color: #fff9db !important;
+}
+
+.app-navbar {
+  background: #0f172a;
+  border-bottom: 1px solid #1e293b;
+}
+
+.tiny {
+  font-size: 0.7rem;
+  letter-spacing: 0.04em;
+}
+
+.metric-sm {
+  min-height: auto;
+  padding: 0.75rem 1rem;
+}
+
+.metric-sm .metric-value {
+  font-size: clamp(1.1rem, 1.6vw, 1.5rem);
+}
+
+.mov-row {
+  cursor: pointer;
+}
+
+/* Movimiento que no estaba en la lectura anterior del buzón. */
+.mov-nueva td {
+  background-color: #e8f7ee !important;
+}
+
+.mov-nueva td:first-child {
+  box-shadow: inset 3px 0 0 #198754;
+}

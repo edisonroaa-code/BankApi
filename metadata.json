@@ -1,0 +1,7 @@
+{
+  "name": "BankApi",
+  "description": "Plataforma empresarial de gestión de cobros en caja y verificación de transferencias bancarias.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}

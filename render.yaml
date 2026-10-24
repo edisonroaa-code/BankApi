@@ -1,0 +1,115 @@
+# Render Blueprint — BankApi
+# https://render.com/docs/blueprint-spec
+#
+# ALL sensitive values (DB credentials, secrets) must be set manually
+# in the Render Dashboard > Service > Environment Variables.
+# NEVER commit secrets to this file.
+
+services:
+  # ── Backend API (NestJS) ──────────────────────────
+  - type: web
+    name: bankapi-api
+    runtime: node
+    region: ohio
+    plan: free
+    # Treat the NestJS app as its own Node project. This avoids relying on
+    # shell `cd` chains and makes Render resolve the backend package directly.
+    rootDir: backend
+    buildCommand: npm ci --include=dev --no-audit --no-fund && npm run build:prod && node scripts/deploy-readonly-preflight.cjs
+    startCommand: node dist/main.js
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: "3000"
+      - key: DB_HOST
+        sync: false # Set in Render Dashboard
+      - key: DB_PORT
+        sync: false
+      - key: DB_USERNAME
+        sync: false
+      - key: DB_PASSWORD
+        sync: false
+      - key: DB_DATABASE
+        sync: false
+      - key: DB_SSL
+        value: "true"
+      - key: DB_SYNCHRONIZE
+        value: "false"
+      - key: JWT_SECRET
+        generateValue: true
+      # Origenes del navegador aceptados por la API y el WebSocket, separados por coma.
+      # Valor recomendado: https://bankapi-web.onrender.com
+      # Obligatorio en produccion: la API no arranca sin un origen configurado.
+      - key: CORS_ORIGINS
+        sync: false
+      # Feed de transferencias del banco (Atlas Connect, solo lectura). Apagado hasta cargar las
+      # credenciales y pasar atlas:probe:prod. Ver ACOPLE_ATLAS_PRODUCCION.md.
+      - key: BANK_FEED_MODE
+        sync: false # Mantener el modo elegido por el titular; Blueprint no debe volver a apagar Atlas.
+      - key: ATLAS_PROBE_ON_DEPLOY
+        sync: false # true solo durante una ventana que comprueba lectura bancaria antes de publicar.
+      - key: CLOUDINARY_PROBE_ON_DEPLOY
+        sync: false # true solo para comprobar PNG/PDF privados sintéticos; nunca escribe Neon.
+      - key: BANK_FEED_ACCOUNT
+        sync: false
+      - key: BANK_FEED_HOURS
+        value: "07:00-20:00"
+      # Cada 5 s, compartido y solo con un panel de transferencias abierto y visible.
+      - key: BANK_FEED_INTERVAL_SECONDS
+        value: "5"
+      # Rescate de lo que entro fuera de horario o sin panel abierto (noches, fines de semana).
+      - key: BANK_FEED_CATCHUP_DAYS
+        value: "4"
+      - key: BANK_FEED_SIPAP_ENRICH
+        value: "false"
+      - key: ATLAS_BASE_URL
+        sync: false
+      - key: ATLAS_TRANSFERENCIAS_BASE_URL
+        sync: false
+      - key: ATLAS_DATOS_GENERALES_BASE_URL
+        sync: false
+      - key: ATLAS_API_KEY
+        sync: false
+      - key: ATLAS_ACCOUNT_AUTH_TOKEN
+        sync: false
+      - key: ATLAS_PRIVATE_KEY_PEM
+        sync: false
+      - key: ATLAS_JWT_ISS
+        sync: false
+      - key: ATLAS_JWT_SUB
+        sync: false
+      - key: ATLAS_BANK_PUBLIC_KEY_PEM
+        sync: false
+      # Decision del titular (2026-10-08): operar como el banco lo habilito. Atlas responde sin
+      # firma (alg: none); con "true" el feed rechazaria todo. Si Atlas empieza a firmar, volver a
+      # "true" y cargar ATLAS_BANK_PUBLIC_KEY_PEM. La conexion sigue cifrada y valida el certificado.
+      - key: ATLAS_VERIFY_RESPONSE
+        value: "false"
+      - key: CLOUDINARY_URL
+        sync: false # Set in Render Dashboard; never commit provider credentials
+      - key: CLOUDINARY_CLOUD_NAME
+        sync: false # Optional alternative to CLOUDINARY_URL
+      - key: CLOUDINARY_API_KEY
+        sync: false # Optional alternative to CLOUDINARY_URL
+      - key: CLOUDINARY_API_SECRET
+        sync: false # Optional alternative to CLOUDINARY_URL
+
+  # ── Frontend (React Static Site) ──────────────────
+  - type: web
+    name: bankapi-web
+    runtime: static
+    buildCommand: npm ci --no-audit --no-fund && npm run build
+    staticPublishPath: ./dist
+    envVars:
+      - key: VITE_API_URL
+        value: https://bankapi-api.onrender.com
+    headers:
+      - path: /*
+        name: Cache-Control
+        value: public, max-age=0, must-revalidate
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html

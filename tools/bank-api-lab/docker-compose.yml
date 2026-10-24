@@ -1,0 +1,12 @@
+services:
+  atlas-connect:
+    container_name: atlas-connect-adapter
+    build: .
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:8000:8000"
+    env_file:
+      - .env
+    volumes:
+      - ./keys:/app/keys:ro
+

@@ -57,6 +57,8 @@ venv/
 kpi_debug.json
 backend/test-neon.cjs
 backend/.env.local.backup
+donde clonar codigos.txt
+bankApi github.txt
 
 # Editor directories and files
 .vscode/*

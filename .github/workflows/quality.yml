@@ -1,0 +1,51 @@
+name: Calidad sin acceso a producción
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            backend/package-lock.json
+      - name: Instalar frontend
+        run: npm ci --include=dev --no-audit --no-fund
+      - name: Instalar backend
+        run: npm ci --prefix backend --include=dev --no-audit --no-fund
+      - name: Reglas estáticas de seguridad
+        run: npm --prefix backend run lint:security
+      - name: Tipos de interfaz
+        run: npm run typecheck
+      - name: Pruebas backend
+        run: npm --prefix backend test -- --runInBand
+      - name: Sondas de release sin credenciales
+        run: node --test backend/scripts/deploy-preflight.test.cjs
+      - name: Contratos frontend y secretos
+        run: |
+          npm run test:health
+          npm run test:manual-policy
+          npm run test:secrets
+      - name: Instalar navegador aislado de pruebas
+        run: npx playwright install --with-deps chromium
+      - name: Actualizacion PWA con dos pestañas
+        run: npm run test:pwa
+      - name: Compilar backend
+        run: npm --prefix backend run build:prod
+      - name: Compilar frontend
+        run: npm run build
+      - name: Dependencias de ejecución sin alertas altas
+        run: npm --prefix backend audit --omit=dev --audit-level=high

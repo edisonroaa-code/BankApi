@@ -5,10 +5,10 @@ Para ver el plan de transformación y el estado de las fases de implementación,
 
 ---
 
-## 1. Principio de Identidad del Producto (Zero Classic Center)
+## 1. Principio de Identidad del Producto (Zero Legacy Branding)
 
 - **Nombre del Producto**: **BankApi**.
-- **Prohibición de Marca Anterior**: Ningún archivo de código, interfaz, ticket de impresión, reporte PDF/Excel, manifiesto PWA, instalador Electron o documento de este repositorio debe contener referencias a *"Classic Center"* ni *"transferencias-classic"*.
+- **Prohibición de Marca Anterior**: Ningún archivo de código, interfaz, ticket de impresión, reporte PDF/Excel, manifiesto PWA, instalador Electron o documento de este repositorio debe contener referencias a empresas cliente específicas ni marcas previas; la única marca del producto es **BankApi**.
 - **Enfoque Comercial Multi-Empresa**: El sistema está diseñado para instalarse en cualquier empresa compradora limitándose a:
   1. Configurar los parámetros de la API bancaria provista por el banco y los datos comerciales de la empresa.
   2. Crear los usuarios operativos (`ADMIN`, `SUPERVISOR`, `CAJERO`, `COBRADOR`).
@@ -115,5 +115,5 @@ Para ver el plan de transformación y el estado de las fases de implementación,
    - `npm --prefix backend run build:prod`
    - `npm run build`
 5. **Auditoría de Marca y Secretos**:
-   - Cero ocurrencias de `"Classic Center"` en código fuente, vistas, tickets y reportes.
+   - Cero ocurrencias de nombres de empresas previas en código fuente, vistas, tickets y reportes.
    - Cero archivos `.env` o llaves privadas `.pem` en `git status`.

@@ -1,0 +1,16 @@
+.env
+.env.*
+!.env.example
+keys/
+*.pem
+*.key
+.git/
+.gitignore
+__pycache__/
+.pytest_cache/
+tests/
+*.pdf
+*.md
+docker-compose.yml
+uvicorn.*.log
+*.txt.bak

@@ -1,0 +1,2 @@
+export const BANK_FEED_CONFIG = 'BANK_FEED_CONFIG';
+export const BANK_FEED_SOURCE = 'BANK_FEED_SOURCE';

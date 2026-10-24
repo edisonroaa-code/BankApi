@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>BankApi Connect - Buzón de movimientos</title>
+    <link rel="icon" type="image/x-icon" href="/static/favicon.ico" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <!-- Barra superior: cuenta activa, estado y menú de opciones -->
+    <nav class="app-navbar sticky-top">
+      <div class="container-fluid px-3 px-lg-4 py-2 d-flex flex-wrap align-items-center gap-3">
+        <div class="d-flex align-items-center gap-2 me-auto">
+          <img src="/static/logo.png" alt="BankApi" class="header-logo" />
+          <div class="lh-sm">
+            <span class="d-block text-uppercase text-white-50 fw-semibold tiny">BankApi · Conector Bancario</span>
+            <span class="d-block text-white fw-semibold">Buzón de movimientos</span>
+          </div>
+        </div>
+
+        <span id="activeAccount" class="badge text-bg-light border">Sin cuenta configurada</span>
+
+        <div class="d-flex align-items-center gap-2">
+          <div class="form-check form-switch mb-0">
+            <input class="form-check-input" type="checkbox" id="autoRefresh" checked />
+            <label class="form-check-label text-white small" for="autoRefresh">
+              Auto <span id="countdown" class="font-monospace">--</span>
+            </label>
+          </div>
+          <button id="refreshNow" class="btn btn-sm btn-light" type="button">Actualizar</button>
+        </div>
+
+        <span id="serviceStatus" class="badge text-bg-secondary">Sin consultar</span>
+
+        <div class="dropdown">
+          <button class="btn btn-sm btn-outline-light dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Opciones
+          </button>
+          <ul class="dropdown-menu dropdown-menu-end">
+            <li>
+              <button class="dropdown-item" type="button" data-bs-toggle="offcanvas" data-bs-target="#filtersPanel">
+                Parámetros de consulta
+              </button>
+            </li>
+            <li><hr class="dropdown-divider" /></li>
+            <li><button class="dropdown-item" type="button" data-tool="alias">Consulta de alias</button></li>
+            <li><button class="dropdown-item" type="button" data-tool="catalogos">Catálogos SIPAP</button></li>
+            <li><button class="dropdown-item" type="button" data-tool="sipap">Estado de operación SIPAP</button></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <div id="alertHost" class="position-fixed top-0 end-0 p-3 toast-layer"></div>
+
+    <main class="container-fluid px-3 px-lg-4 py-3">
+      <!-- Franja de saldo: contexto del buzón -->
+      <section class="row g-3 mb-3">
+        <div class="col-6 col-lg-3">
+          <div class="metric metric-sm">
+            <span class="metric-label">Saldo disponible</span>
+            <strong id="availableBalance" class="metric-value">--</strong>
+            <span id="balanceStatus" class="small text-muted d-block" role="status">Sin consultar</span>
+          </div>
+        </div>
+        <div class="col-6 col-lg-3">
+          <div class="metric metric-sm">
+            <span class="metric-label">Saldo total</span>
+            <strong id="totalBalance" class="metric-value">--</strong>
+          </div>
+        </div>
+        <div class="col-6 col-lg-3">
+          <div class="metric metric-sm">
+            <span class="metric-label">Moneda / Producto</span>
+            <strong id="currency" class="metric-value">--</strong>
+            <span id="productBadge" class="small text-muted d-block text-truncate">--</span>
+          </div>
+        </div>
+        <div class="col-6 col-lg-3">
+          <div class="metric metric-sm">
+            <span class="metric-label">Última actualización</span>
+            <strong id="lastUpdate" class="metric-value">--</strong>
+            <span id="queryInfo" class="small text-muted d-block text-truncate">--</span>
+          </div>
+        </div>
+      </section>
+
+      <div id="additionalInfoCard" class="card app-card mb-3 d-none">
+        <div class="card-body py-2 px-3 small text-secondary">
+          <div class="row g-2 align-items-center">
+            <div class="col-6 col-md-2"><strong>A confirmar:</strong> <span id="pendingDeposit">--</span></div>
+            <div class="col-6 col-md-2"><strong>Saldo promedio:</strong> <span id="averageBalance">--</span></div>
+            <div class="col-6 col-md-2"><strong>Saldo bloqueado:</strong> <span id="blockedBalance">--</span></div>
+            <div class="col-6 col-md-2"><strong>Saldo protegido:</strong> <span id="protectedBalance">--</span></div>
+            <div class="col-6 col-md-2"><strong>Línea sobregiro:</strong> <span id="overdraftLimit">--</span></div>
+            <div class="col-6 col-md-2"><strong>Mov. pendientes:</strong> <span id="pendingMovements">--</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- BUZÓN: protagonista de la pantalla -->
+      <section class="card app-card">
+        <div class="card-body">
+          <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3">
+            <div>
+              <h1 class="h5 mb-0">Ingresos y egresos</h1>
+              <small id="movementEndpointType" class="text-muted">Sin consultar</small>
+              <small id="movementStatus" class="text-muted d-block" role="status">Sin consultar</small>
+            </div>
+            <div class="d-flex align-items-center gap-2">
+              <span id="newCount" class="badge text-bg-success d-none">0 nuevos</span>
+              <button id="markSeen" class="btn btn-sm btn-outline-success d-none" type="button">Marcar como visto</button>
+              <span id="movementCount" class="badge text-bg-light border text-secondary">0 registros</span>
+            </div>
+          </div>
+
+          <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+              <thead>
+                <tr>
+                  <th scope="col"></th>
+                  <th scope="col">Fecha</th>
+                  <th scope="col">Concepto / Transacción</th>
+                  <th scope="col">Remitente</th>
+                  <th scope="col">Documento</th>
+                  <th scope="col">Tipo</th>
+                  <th scope="col" class="text-end">Monto</th>
+                </tr>
+              </thead>
+              <tbody id="movementsTable">
+                <tr>
+                  <td colspan="7" class="text-center text-secondary py-5">
+                    Configure una cuenta en <strong>Opciones → Parámetros de consulta</strong> para abrir el buzón.
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="text-muted small mb-0 mt-3">
+            Haga clic en un movimiento para ver su detalle completo.
+          </p>
+        </div>
+      </section>
+    </main>
+
+    <!-- Panel de parámetros -->
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="filtersPanel" aria-labelledby="filtersPanelLabel">
+      <div class="offcanvas-header">
+        <h2 class="offcanvas-title h5" id="filtersPanelLabel">Parámetros de consulta</h2>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Cerrar"></button>
+      </div>
+      <div class="offcanvas-body">
+        <form id="queryForm" class="vstack gap-3">
+          <div>
+            <label for="internalApiKey" class="form-label">Clave interna del adaptador (no del banco)</label>
+            <input id="internalApiKey" type="password" class="form-control" autocomplete="off" spellcheck="false" />
+            <div class="form-text">Sólo si el adaptador la solicita. Se conserva mientras esta página está abierta; no ingrese claves, tokens ni API keys de Atlas.</div>
+          </div>
+          <div>
+            <label for="accountNumber" class="form-label">Número de cuenta</label>
+            <input id="accountNumber" class="form-control" inputmode="numeric" placeholder="Ej. 123456" autocomplete="off" required />
+            <div class="form-text">Se recuerda en este navegador para no reescribirla.</div>
+          </div>
+
+          <div class="row g-3">
+            <div class="col-6">
+              <label for="startDate" class="form-label">Fecha inicio</label>
+              <input id="startDate" type="date" class="form-control" required />
+            </div>
+            <div class="col-6">
+              <label for="endDate" class="form-label">Fecha fin</label>
+              <input id="endDate" type="date" class="form-control" required />
+            </div>
+          </div>
+
+          <div class="row g-3">
+            <div class="col-6">
+              <label for="movementType" class="form-label">Tipo movimiento</label>
+              <select id="movementType" class="form-select">
+                <option value="">Todos</option>
+                <option value="D">Débito</option>
+                <option value="C">Crédito</option>
+              </select>
+            </div>
+            <div class="col-6">
+              <label for="limit" class="form-label">Límite</label>
+              <input id="limit" type="number" min="1" max="500" class="form-control" value="50" />
+            </div>
+          </div>
+
+          <div class="p-3 bg-light rounded-2 border">
+            <span class="small fw-semibold text-secondary d-block mb-2">Opciones de movimientos</span>
+            <div class="form-check form-switch mb-2">
+              <input class="form-check-input" type="checkbox" id="detailedMovements" checked />
+              <label class="form-check-label small" for="detailedMovements">
+                <strong>Movimientos detallados</strong> (datos de remitente)
+              </label>
+            </div>
+            <div class="form-check form-switch">
+              <input class="form-check-input" type="checkbox" id="includeReversed" />
+              <label class="form-check-label small" for="includeReversed">Incluir transacciones reversadas</label>
+            </div>
+          </div>
+
+          <div class="d-grid">
+            <button id="submitButton" class="btn btn-primary" type="submit">Aplicar y consultar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Modal reutilizable para las opciones del menú -->
+    <div class="modal fade" id="toolModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h2 class="modal-title h5" id="toolModalTitle">Opción</h2>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+          </div>
+          <div class="modal-body" id="toolModalBody"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal de detalle de un movimiento -->
+    <div class="modal fade" id="movementDetailModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h2 class="modal-title h5" id="modalTitle">Detalle de transacción</h2>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+          </div>
+          <div class="modal-body">
+            <div id="modalContent" class="vstack gap-2"></div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cerrar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/static/app.js?v=20261007-1"></script>
+  </body>
+</html>
