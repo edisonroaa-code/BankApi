@@ -23,7 +23,7 @@ export const StartCenterView = ({
   const [busy, setBusy] = useState<null | 'PROBE' | 'START_DB' | 'START_BACKEND' | 'START_ALL' | 'STOP_BACKEND' | 'STOP_DB'>(null);
   const [svc, setSvc] = useState<{
     backend?: { available: boolean; running: boolean; pid: number | null };
-    ports?: { api3000?: { listening: boolean; pid: number | null }; db5433?: { listening: boolean; pid: number | null } };
+    ports?: { api48300?: { listening: boolean; pid: number | null }; db48543?: { listening: boolean; pid: number | null } };
     autoStart?: { enabled: boolean; running: boolean; done: boolean; ok: boolean | null; message: string };
   } | null>(null);
   const [lastOutput, setLastOutput] = useState<string | null>(null);
@@ -48,7 +48,7 @@ export const StartCenterView = ({
     setServerStatus(null);
     const next = serverUrl.trim();
     if (!isAbsoluteHttpUrl(next)) {
-      setServerStatus('Usá una URL absoluta. Ej: http://IP_DEL_SERVIDOR:3000');
+      setServerStatus('Usá una URL absoluta. Ej: http://IP_DEL_SERVIDOR:48300');
       return;
     }
     setApiBaseURL(next);
@@ -164,7 +164,7 @@ export const StartCenterView = ({
                 <Settings className="w-4 h-4" /> Backend (URL)
               </div>
               <div className="text-[11px] text-slate-500">
-                Clientes en la red: usá <b>http://IP_DEL_SERVIDOR:3000</b>
+                Clientes en la red: usá <b>http://IP_DEL_SERVIDOR:48300</b>
               </div>
             </div>
             <div className="mt-3 flex gap-2">
@@ -173,7 +173,7 @@ export const StartCenterView = ({
                 className="flex-1 p-2 border rounded bg-white"
                 value={serverUrl}
                 onChange={(e) => setServerUrl(e.target.value)}
-                placeholder="http://IP_DEL_SERVIDOR:3000"
+                placeholder="http://IP_DEL_SERVIDOR:48300"
               />
               <button type="button" onClick={saveServerUrl} className="px-3 py-2 text-sm rounded border bg-white hover:bg-gray-50">
                 Guardar
@@ -203,13 +203,13 @@ export const StartCenterView = ({
               <div className="text-xs text-gray-500 mt-1">Disponible solo en la app de escritorio (Electron).</div>
             ) : (
               <div className="text-xs text-gray-600 mt-1">
-                API :3000:{' '}
+                API :48300:{' '}
                 <b>
-                  {svc?.ports?.api3000?.listening ? `ESCUCHANDO (PID ${svc.ports.api3000.pid})` : 'NO'}
+                  {svc?.ports?.api48300?.listening ? `ESCUCHANDO (PID ${svc.ports.api48300.pid})` : 'NO'}
                 </b>{' '}
-                · DB :5433:{' '}
+                · DB :48543:{' '}
                 <b>
-                  {svc?.ports?.db5433?.listening ? `OK (PID ${svc.ports.db5433.pid})` : 'NO'}
+                  {svc?.ports?.db48543?.listening ? `OK (PID ${svc.ports.db48543.pid})` : 'NO'}
                 </b>
                 {!svc?.backend?.available ? <span className="text-red-600"> · (backend no encontrado)</span> : null}
                 {svc?.autoStart ? (

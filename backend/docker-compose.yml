@@ -11,41 +11,41 @@ services:
       - .env
     environment:
       NODE_ENV: production
-      PORT: 3000
+      PORT: 48300
       DB_HOST: db
       DB_PORT: 5432
-      APP_VERSION: ${APP_VERSION:-0.1.0}
+      APP_VERSION: ${APP_VERSION:-1.0.0}
       APP_COMMIT: ${APP_COMMIT:-unknown}
     depends_on:
       db:
         condition: service_healthy
     ports:
-      - "${PORT:-3000}:3000"
+      - "${PORT:-48300}:48300"
     volumes:
       - backend_uploads:/app/uploads
       - backend_logs:/app/logs
     networks:
-      - transferencias_net
+      - bankapi_net
 
   db:
     image: postgres:15-alpine
-    container_name: transferencias_db
+    container_name: bankapi_db
     restart: unless-stopped
     environment:
       POSTGRES_USER: ${DB_USERNAME:-postgres}
       POSTGRES_PASSWORD: ${DB_PASSWORD:-admin}
-      POSTGRES_DB: ${DB_DATABASE:-transferencias_db}
+      POSTGRES_DB: ${DB_DATABASE:-bankapi_db}
     ports:
-      - "${DB_PORT:-5433}:5432"
+      - "${DB_PORT:-48543}:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME:-postgres} -d ${DB_DATABASE:-transferencias_db}"]
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME:-postgres} -d ${DB_DATABASE:-bankapi_db}"]
       interval: 10s
       timeout: 5s
       retries: 6
     networks:
-      - transferencias_net
+      - bankapi_net
 
 volumes:
   postgres_data:
@@ -53,5 +53,5 @@ volumes:
   backend_logs:
 
 networks:
-  transferencias_net:
+  bankapi_net:
     driver: bridge

@@ -22,9 +22,6 @@ coverage/
 /backend/coverage/
 .packaging/
 .vite_cache/
-.codemap/
-.tmp-clean-test/
-_backup_optimization/
 /release/
 /release-build/
 /backups/
@@ -52,13 +49,6 @@ __pycache__/
 .venv/
 venv/
 .pytest_cache/
-
-# Local diagnostics / generated data
-kpi_debug.json
-backend/test-neon.cjs
-backend/.env.local.backup
-donde clonar codigos.txt
-bankApi github.txt
 
 # Editor directories and files
 .vscode/*

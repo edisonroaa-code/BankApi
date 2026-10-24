@@ -142,8 +142,8 @@ const getPorts = () => {
   ].filter(Boolean);
   const merged = {};
   envCandidates.forEach((p) => Object.assign(merged, parseEnvFile(p)));
-  const apiPort = Number(merged.PORT || merged.API_PORT || 3000) || 3000;
-  const dbPort = Number(merged.DB_PORT || 5433) || 5433;
+  const apiPort = Number(merged.PORT || merged.API_PORT || 48300) || 48300;
+  const dbPort = Number(merged.DB_PORT || 48543) || 48543;
   return { apiPort, dbPort };
 };
 

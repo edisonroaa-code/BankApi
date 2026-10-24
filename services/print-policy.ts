@@ -11,7 +11,7 @@ export class PrintPolicyError extends Error { readonly userMessage = this.messag
 export const askReprintReason = (issued: boolean): string | undefined => {
   if (!issued) return undefined;
   let role: string | undefined;
-  try { role = JSON.parse(localStorage.getItem('bnf_app_session_v2') || '{}').user?.role; } catch { /* Sin sesión: denegar. */ }
+  try { role = JSON.parse(localStorage.getItem('bankapi_session_v1') || '{}').user?.role; } catch { /* Sin sesión: denegar. */ }
   if (role !== 'ADMIN') throw new PrintPolicyError('El ticket ya fue emitido. Solo ADMIN puede reimprimirlo.');
   const reason = window.prompt('Motivo de la reimpresión autorizada por ADMIN (10 a 500 caracteres):')?.trim();
   if (!reason) throw new PrintPolicyError('Reimpresión cancelada.');

@@ -13,7 +13,7 @@ if (-not (Test-IsAdmin)) {
   exit 1
 }
 
-$names = @('BankApi API 3000', 'BankApi Web 5173')
+$names = @('BankApi API 48300', 'BankApi Web 48517')
 foreach ($name in $names) {
   $existing = Get-NetFirewallRule -DisplayName $name -ErrorAction SilentlyContinue
   if ($null -ne $existing) {

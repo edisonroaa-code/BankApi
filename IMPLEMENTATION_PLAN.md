@@ -19,10 +19,10 @@ El objetivo comercial de **BankApi** es que, al instalarlo en cualquier empresa 
 ## 2. Componentes Integrados del Sistema
 
 1. **Sistema Principal Full-Stack**:
-   - React 19.2 + TypeScript 5.8 + Vite 6.2 + Tailwind CSS 4.1 + Socket.IO Client 4.8 + PWA + Electron 39.
-   - Backend NestJS 11 + TypeORM 0.3.28 + PostgreSQL 16 + Passport JWT + Bcrypt + ExcelJS + PDFKit + Cloudinary.
+   - React 19.2 + TypeScript 5.8 + Vite 6.2 (`:48517`) + Tailwind CSS 4.1 + Socket.IO Client 4.8 + PWA + Electron 39.
+   - Backend NestJS 11 (`:48300`) + TypeORM 0.3.28 + PostgreSQL 16 (`:48543` en Docker `bankapi_db`) + Passport JWT + Bcrypt + ExcelJS + PDFKit + Cloudinary.
 2. **Laboratorio de Conector Bancario (`tools/bank-api-lab/`)**:
-   - FastAPI + `httpx` + `PyJWT[crypto]` (`api_atlas.py`, `app.py`), integrado en `tools/bank-api-lab/` como kit de homologación y diagnóstico bancario.
+   - FastAPI + `httpx` + `PyJWT[crypto]` (`:48880`, `api_atlas.py`, `app.py`), integrado en `tools/bank-api-lab/` como kit de homologación y diagnóstico bancario.
 
 > **Regla Crítica de Secretos:** Jamás incluir archivos `.env`, `.env.local`, `.env.neon`, backups SQL ni llaves privadas reales (`keys/*.pem`) en el repositorio `BankApi`.
 

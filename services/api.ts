@@ -2,7 +2,7 @@ import axios from 'axios';
 import { isApiBaseOverrideAllowed } from './api-base-policy';
 
 // In dev, Vite proxies `/api` -> backend (see `vite.config.ts`).
-// This keeps the browser always on :5173 and avoids hardcoding backend ports in the frontend.
+// This keeps the browser always on :48517 and avoids hardcoding backend ports in the frontend.
 const API_URL = (import.meta as any).env?.VITE_API_URL || '/api';
 const API_URL_STORAGE_KEY = 'bankapi_api_base_url_v1';
 

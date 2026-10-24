@@ -13,8 +13,8 @@ declare global {
         status: () => Promise<{
           backend: { available: boolean; running: boolean; pid: number | null; backendDir: string | null };
           ports?: {
-            api3000: { listening: boolean; pid: number | null };
-            db5433: { listening: boolean; pid: number | null };
+            api48300: { listening: boolean; pid: number | null };
+            db48543: { listening: boolean; pid: number | null };
           };
           autoStart?: {
             enabled: boolean;

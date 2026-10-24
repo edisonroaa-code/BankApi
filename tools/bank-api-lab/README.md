@@ -23,10 +23,10 @@ Adaptador web aislado (FastAPI + `httpx` + `PyJWT[crypto]`) incluido en **BankAp
 python -m venv .venv
 .venv\Scripts\Activate.ps1
 pip install -r requirements.txt -c requirements.lock
-uvicorn app:app --reload --no-access-log
+uvicorn app:app --host 127.0.0.1 --port 48880 --reload --no-access-log
 ```
 
-Abrir `http://localhost:8000`.
+Abrir `http://localhost:48880`.
 
 ## Ejecución de Pruebas del Conector
 

@@ -14,8 +14,8 @@ if (-not (Test-IsAdmin)) {
 }
 
 $rules = @(
-  @{ Name = 'BankApi API 3000'; Port = 3000 },
-  @{ Name = 'BankApi Web 5173'; Port = 5173 }
+  @{ Name = 'BankApi API 48300'; Port = 48300 },
+  @{ Name = 'BankApi Web 48517'; Port = 48517 }
 )
 
 foreach ($r in $rules) {
@@ -37,5 +37,5 @@ foreach ($r in $rules) {
 }
 
 Write-Host "Listo. Ahora otros dispositivos en la LAN pueden acceder a:" -ForegroundColor Green
-Write-Host "  http://IP_DE_TU_PC:5173  (Web)" -ForegroundColor Cyan
-Write-Host "  http://IP_DE_TU_PC:3000  (API)" -ForegroundColor Cyan
+Write-Host "  http://IP_DE_TU_PC:48517  (Web)" -ForegroundColor Cyan
+Write-Host "  http://IP_DE_TU_PC:48300  (API)" -ForegroundColor Cyan

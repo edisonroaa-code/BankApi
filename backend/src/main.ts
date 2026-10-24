@@ -16,7 +16,7 @@ async function bootstrap() {
     forbidNonWhitelisted: true,
   }));
   const config = app.get(ConfigService);
-  const port = config.get<number>('PORT') ?? 3000;
+  const port = config.get<number>('PORT') ?? 48300;
   // Bind to all interfaces so other devices on the same LAN can reach the API.
   await app.listen(port, '0.0.0.0');
 }

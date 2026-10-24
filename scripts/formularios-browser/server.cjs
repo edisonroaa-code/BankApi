@@ -218,38 +218,18 @@ const api = http.createServer(async (req, res) => {
     const fixtures = {
       name: "synthetic-fixture",
       enforce: "pre",
-      transform(code, id) {
-        if (
-          baseline &&
-          [
-            "views/CobradorDashboard.tsx",
-            "views/BankTransfersPanel.tsx",
-            "views/ReconciliationView.tsx",
-          ].some((f) => id.replaceAll("\\", "/").endsWith("/" + f))
-        ) {
-          const file = id
-            .replaceAll("\\", "/")
-            .slice(root.replaceAll("\\", "/").length + 1);
-          return execFileSync("git", ["show", "25a52a5:" + file], {
-            cwd: root,
-            encoding: "utf8",
-          });
-        }
-      },
       transformIndexHtml(html) {
         const session = { access_token: "fixture-only", user };
         return html
           .replace(
             "<head>",
-            `<head><script>if(!localStorage.getItem('bnf_app_session_v2'))localStorage.setItem('bnf_app_session_v2',${JSON.stringify(JSON.stringify(session))});</script>`,
+            `<head><script>if(!localStorage.getItem('bankapi_session_v1'))localStorage.setItem('bankapi_session_v1',${JSON.stringify(JSON.stringify(session))});</script>`,
           )
           .replace(
             /<body\b[^>]*>/,
             (body) =>
               body +
-              '<div style="background:#fef3c7;padding:4px;text-align:center">PRUEBA AISLADA — DATOS SINTÉTICOS — ' +
-              (baseline ? "VERSIÓN ANTERIOR" : "VERSIÓN CORREGIDA") +
-              "</div>",
+              '<div style="background:#fef3c7;padding:4px;text-align:center">PRUEBA AISLADA — DATOS SINTÉTICOS</div>',
           );
       },
     };

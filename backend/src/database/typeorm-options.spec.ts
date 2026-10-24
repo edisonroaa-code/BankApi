@@ -15,9 +15,9 @@ describe('Configuracion de TypeORM', () => {
   });
 
   it('permite synchronize solo en una base local de desarrollo', () => {
-    const options = buildTypeOrmOptions(envOf({ DB_HOST: 'localhost', DB_PORT: '5433' }));
+    const options = buildTypeOrmOptions(envOf({ DB_HOST: 'localhost', DB_PORT: '48543' }));
     expect(options.synchronize).toBe(true);
-    expect((options as any).port).toBe(5433);
+    expect((options as any).port).toBe(48543);
   });
 
   it('en produccion synchronize queda apagado por defecto y nunca corre migraciones solo', () => {

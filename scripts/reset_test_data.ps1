@@ -36,7 +36,7 @@ if (-not $dbUser -or -not $dbName) {
   throw "DB_USERNAME y DB_DATABASE deben estar definidos en $envPath"
 }
 
-$containerName = 'transferencias_db'
+$containerName = 'bankapi_db'
 $containerId = (& docker ps -q -f "name=^${containerName}$") | Select-Object -First 1
 if (-not $containerId) {
   throw "No se encontró el contenedor Docker '$containerName'. Encendé Docker y ejecutá: docker compose -f backend/docker-compose.yml --env-file backend/.env up -d"
@@ -44,6 +44,7 @@ if (-not $containerId) {
 
 $what = @(
   'payments (consultas)',
+  'bank_transfers / bank_transfer_claims (transferencias y tomas)',
   'movements (extractos importados)',
   'audit_logs (auditoría)'
 )
@@ -75,7 +76,7 @@ if (-not $NoBackup) {
   docker exec $containerName sh -c $dumpCmd | Set-Content -Encoding utf8 $dumpPath
 }
 
-$tables = @('public.audit_logs', 'public.payments', 'public.movements')
+$tables = @('public.audit_logs', 'public.bank_transfer_claims', 'public.bank_transfers', 'public.payments', 'public.movements')
 if ($IncludeUsers) { $tables += 'public.users' }
 
 $sql = "TRUNCATE TABLE $($tables -join ', ') RESTART IDENTITY CASCADE;"

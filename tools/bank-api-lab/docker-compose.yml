@@ -1,10 +1,10 @@
 services:
-  atlas-connect:
-    container_name: atlas-connect-adapter
+  bankapi-connect-lab:
+    container_name: bankapi-connect-lab
     build: .
     restart: unless-stopped
     ports:
-      - "127.0.0.1:8000:8000"
+      - "127.0.0.1:48880:48880"
     env_file:
       - .env
     volumes:

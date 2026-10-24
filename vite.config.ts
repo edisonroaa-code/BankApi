@@ -7,12 +7,12 @@ export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, '.', '');
   const isElectron = env.VITE_APP_TARGET === 'electron';
   const hmrHost = env.VITE_HMR_HOST ? env.VITE_HMR_HOST.trim() : '';
-  // Solo desarrollo: permite apuntar a otro puerto si el 3000 esta ocupado por otra app de la PC.
-  const apiTarget = (env.VITE_DEV_API_TARGET || 'http://localhost:3000').trim();
+  // Solo desarrollo: permite apuntar a otro puerto si el 48300 esta ocupado por otra app de la PC.
+  const apiTarget = (env.VITE_DEV_API_TARGET || 'http://localhost:48300').trim();
   return {
     base: isElectron ? './' : '/',
     server: {
-      port: 5173,
+      port: 48517,
       host: '0.0.0.0',
       strictPort: true,
       hmr: hmrHost ? { host: hmrHost } : undefined,
@@ -20,7 +20,7 @@ export default defineConfig(({ mode }) => {
         ignored: ['**/backend/**', '**/.packaging/**', '**/release/**', '**/release-build/**', '**/backups/**', '**/dist/**'],
       },
       proxy: {
-        // Dev: keep browser on :5173 and proxy API calls to backend (:3000)
+        // Dev: keep browser on :48517 and proxy API calls to backend (:48300)
         '/api': {
           target: apiTarget,
           changeOrigin: true,

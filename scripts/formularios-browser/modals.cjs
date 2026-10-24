@@ -28,7 +28,7 @@ const state = async () => (await fetch(cfg.api + "/__control")).json();
         });
         await ctx.addInitScript(() =>
           localStorage.setItem(
-            "bnf_app_session_v2",
+            "bankapi_session_v1",
             JSON.stringify({
               access_token: "fixture-only",
               user: {

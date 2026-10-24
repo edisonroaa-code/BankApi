@@ -72,7 +72,7 @@ export const LoginView = ({ onLogin, onOpenStart }: { onLogin: () => void; onOpe
     setServerStatus(null);
     const next = serverUrl.trim();
     if (!isAbsoluteHttpUrl(next)) {
-      setServerStatus('Usá una URL absoluta, por ejemplo: https://tu-dominio.com o http://192.168.1.10:3000');
+      setServerStatus('Usá una URL absoluta, por ejemplo: https://tu-dominio.com o http://192.168.1.10:48300');
       return;
     }
     setApiBaseURL(next);
@@ -198,20 +198,20 @@ export const LoginView = ({ onLogin, onOpenStart }: { onLogin: () => void; onOpe
             <div className="mb-6 rounded-lg border border-amber-200 bg-amber-50 p-3">
               <div className="text-sm font-semibold text-amber-900">Backend (URL)</div>
               <div className="text-[11px] text-amber-900/80 mt-1">
-                Esta dirección queda guardada aunque actualices la aplicación. Ejemplo: <b>http://IP_DEL_SERVIDOR:3000</b>
+                Esta dirección queda guardada aunque actualices la aplicación. Ejemplo: <b>http://IP_DEL_SERVIDOR:48300</b>
               </div>
               <div className="mt-2 space-y-2">
                 <input
                   type="text"
                   className="w-full p-2 border border-amber-200 rounded-lg bg-white outline-none focus:ring-2 focus:ring-amber-400"
-                  placeholder="http://IP_DEL_SERVIDOR:3000"
+                  placeholder="http://IP_DEL_SERVIDOR:48300"
                   value={serverUrl}
                   onChange={(e) => setServerUrl(e.target.value)}
                 />
                 <div className="flex gap-2">
                   <button
                     type="button"
-                    onClick={() => useServerPreset('http://localhost:3000')}
+                    onClick={() => useServerPreset('http://localhost:48300')}
                     className="px-3 py-1.5 text-xs rounded border border-amber-300 bg-white hover:bg-amber-100"
                     title="Solo funciona en esta misma PC"
                   >
@@ -243,7 +243,7 @@ export const LoginView = ({ onLogin, onOpenStart }: { onLogin: () => void; onOpe
 
                 {isElectronApp && isLocalhost && (
                   <div className="text-[11px] text-amber-900/90">
-                    Estás usando <b>localhost</b>. En PCs cliente, cambiá a <b>http://IP_DEL_SERVIDOR:3000</b>.
+                    Estás usando <b>localhost</b>. En PCs cliente, cambiá a <b>http://IP_DEL_SERVIDOR:48300</b>.
                   </div>
                 )}
 

@@ -22,7 +22,7 @@ services:
       - key: NODE_ENV
         value: production
       - key: PORT
-        value: "3000"
+        value: "48300"
       - key: DB_HOST
         sync: false # Set in Render Dashboard
       - key: DB_PORT

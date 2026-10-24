@@ -22,10 +22,11 @@ Para ver el plan de transformación y el estado de las fases de implementación,
 - **Almacenamiento de Comprobantes**: Cloudinary (`raw/authenticated` privado) en despliegues Cloud o almacenamiento local protegido en despliegues LAN/On-Premise.
 - **Kit de Homologación Bancaria**: `tools/bank-api-lab/` (adaptador Python/FastAPI para pruebas de firma RS256, mTLS/TLS y contratos bancarios).
 
-### Puertos Estándar de Desarrollo
-- **Web (Vite dev)**: `5173`
-- **API (NestJS)**: `3000`
-- **PostgreSQL (Docker)**: `5433`
+### Puertos Dedicados de Desarrollo (5 dígitos anti-colisión)
+- **Web (Vite dev)**: `48517`
+- **API (NestJS)**: `48300`
+- **PostgreSQL (Docker)**: `48543` (mapeado a `5432` interno en contenedor `bankapi_db`)
+- **Laboratorio de Homologación Bancaria (`tools/bank-api-lab`)**: `48880`
 
 ---
 

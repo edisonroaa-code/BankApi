@@ -56,17 +56,17 @@ cp backend/.env.example backend/.env
 
 Variables principales:
 ```ini
-PORT=3000
+PORT=48300
 NODE_ENV=production
 COMPANY_NAME="Nombre de la Empresa S.A."
 JWT_SECRET=clave_secreta_aleatoria_de_64_caracteres
 
 # Base de datos PostgreSQL
 DB_HOST=localhost
-DB_PORT=5433
+DB_PORT=48543
 DB_USERNAME=postgres
 DB_PASSWORD=tu_password_seguro
-DB_DATABASE=transferencias_db
+DB_DATABASE=bankapi_db
 
 # Conector de API Bancaria (Solo lectura)
 BANK_FEED_MODE=atlas
@@ -93,7 +93,7 @@ npm --prefix backend install
 # Ejecutar migraciones en PostgreSQL
 npm --prefix backend run migration:run
 
-# Desarrollo (Frontend :5173 + Backend :3000)
+# Desarrollo (Frontend :48517 + Backend :48300)
 npm run dev:all
 
 # Compilación de Producción

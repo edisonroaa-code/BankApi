@@ -8,7 +8,7 @@ export const readLocalSmokeConfig = (env: SmokeEnvironment) => {
     const password = env.TEST_API_PASSWORD;
     if (!password) throw new Error('TEST_API_PASSWORD es obligatorio');
 
-    const url = new URL(env.TEST_API_BASE_URL || 'http://127.0.0.1:3000');
+    const url = new URL(env.TEST_API_BASE_URL || 'http://127.0.0.1:48300');
     if (!['localhost', '127.0.0.1', '[::1]'].includes(url.hostname) ||
         !['http:', 'https:'].includes(url.protocol) || url.username || url.password) {
         throw new Error('El smoke test solo se admite contra una API local');

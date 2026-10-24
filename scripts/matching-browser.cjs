@@ -21,7 +21,7 @@ async function main() {
     });
     browser = await chromium.launch({ channel: 'chrome', headless: true });
     const context = await browser.newContext({ viewport: { width: 1366, height: 900 } });
-    await context.addInitScript(() => localStorage.setItem('bnf_app_session_v2', JSON.stringify({
+    await context.addInitScript(() => localStorage.setItem('bankapi_session_v1', JSON.stringify({
       access_token: 'fixture-only', user: { id: 'fixture-a', role: 'ADMIN', username: 'operador-prueba', name: 'Operador de prueba' },
     })));
     let payment = {

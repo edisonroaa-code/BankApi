@@ -18,9 +18,9 @@ describe('local API smoke configuration', () => {
     expect(readLocalSmokeConfig({
       TEST_API_USERNAME: 'test-admin',
       TEST_API_PASSWORD: 'unique-test-secret',
-      TEST_API_BASE_URL: 'http://127.0.0.1:3000',
+      TEST_API_BASE_URL: 'http://127.0.0.1:48300',
     })).toEqual({
-      baseUrl: 'http://127.0.0.1:3000',
+      baseUrl: 'http://127.0.0.1:48300',
       username: 'test-admin',
       password: 'unique-test-secret',
     });

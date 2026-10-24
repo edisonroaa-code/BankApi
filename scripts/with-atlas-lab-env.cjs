@@ -1,14 +1,12 @@
 #!/usr/bin/env node
 /**
- * Ejecuta un comando con las credenciales Atlas del laboratorio en el entorno, SIN copiarlas a este
- * repositorio. Solo para desarrollo local: en Render las variables se cargan en su panel.
+ * Ejecuta un comando con las credenciales bancarias del laboratorio (`tools/bank-api-lab`) en el entorno,
+ * SIN copiarlas a la raíz ni imprimir valores.
  *
- *   ATLAS_LAB_DIR="D:\APLICATIVOS\conexion a api del sistema de transferencias" ^
  *   BANK_FEED_ACCOUNT=<cuenta> node scripts/with-atlas-lab-env.cjs npm --prefix backend run atlas:probe
  *
  * Toma solo las variables ATLAS_* del `.env` del laboratorio y resuelve las rutas de las claves
- * respecto de esa carpeta. Lo que ya este definido en el entorno manda (asi se puede, por ejemplo,
- * forzar ATLAS_VERIFY_RESPONSE). Nunca imprime valores.
+ * respecto de esa carpeta. Lo que ya esté definido en el entorno tiene prioridad.
  */
 const fs = require('fs');
 const path = require('path');
@@ -32,10 +30,11 @@ const parseLabEnv = (text, labDir) => {
 };
 
 const main = () => {
-  const labDir = (process.env.ATLAS_LAB_DIR || '').trim();
+  const defaultLabDir = path.resolve(__dirname, '..', 'tools', 'bank-api-lab');
+  const labDir = (process.env.ATLAS_LAB_DIR || defaultLabDir).trim();
   const command = process.argv.slice(2);
   if (!labDir || command.length === 0) {
-    console.error('Uso: ATLAS_LAB_DIR=<carpeta del laboratorio> node scripts/with-atlas-lab-env.cjs <comando...>');
+    console.error('Uso: [ATLAS_LAB_DIR=<carpeta>] node scripts/with-atlas-lab-env.cjs <comando...>');
     process.exit(2);
   }
   const envFile = path.join(labDir, '.env');

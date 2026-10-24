@@ -16,12 +16,12 @@ COPY static ./static
 RUN addgroup --system appgroup && adduser --system --ingroup appgroup appuser
 USER appuser
 
-EXPOSE 8000
+EXPOSE 48880
 
 # HEALTHCHECK via liveness endpoint
 HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
-  CMD python -c "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/api/health')" || exit 1
+  CMD python -c "import urllib.request; urllib.request.urlopen('http://127.0.0.1:48880/api/health')" || exit 1
 
 # Bind a 0.0.0.0 dentro del contenedor para permitir que Docker exponga los puertos.
 # No guardar números de cuenta, alias ni query strings en el access log.
-CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000", "--no-access-log"]
+CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "48880", "--no-access-log"]

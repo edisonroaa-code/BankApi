@@ -31,7 +31,7 @@ const getRealtimeServerUrl = (): string => {
   }
 
   // If API base is relative (e.g. "/api" in dev), keep sockets on the same origin
-  // and let Vite proxy `/socket.io` -> backend (3000).
+  // and let Vite proxy `/socket.io` -> backend (48300).
   if (base.startsWith('/')) {
     if (typeof window !== 'undefined' && window.location?.origin?.startsWith('http')) {
       try {
@@ -40,10 +40,10 @@ const getRealtimeServerUrl = (): string => {
         // ignore
       }
     }
-    return 'http://localhost:3000';
+    return 'http://localhost:48300';
   }
 
-  return base || 'http://localhost:3000';
+  return base || 'http://localhost:48300';
 };
 
 export const createRealtimeSocket = (): Socket => {

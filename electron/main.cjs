@@ -231,7 +231,7 @@ const ensureDockerReady = async () => {
 };
 
 const spawnBackendProcess = async () => {
-  const alreadyPid = await getListeningPidByPort(3000);
+  const alreadyPid = await getListeningPidByPort(48300);
   if (alreadyPid) return { ok: true, alreadyListening: true, pid: alreadyPid };
 
   if (backendProcess && backendProcess.exitCode === null) {
@@ -272,11 +272,11 @@ const spawnBackendProcess = async () => {
 const waitForApiPort = async (timeoutMs = 25000, pollMs = 500) => {
   const startedAt = Date.now();
   while (Date.now() - startedAt < timeoutMs) {
-    const pid = await getListeningPidByPort(3000);
+    const pid = await getListeningPidByPort(48300);
     if (pid) return { ok: true, pid };
     await sleep(pollMs);
   }
-  return { ok: false, error: 'Timeout esperando puerto 3000.' };
+  return { ok: false, error: 'Timeout esperando puerto 48300.' };
 };
 
 const stopSpawnedBackendIfAny = async () => {
@@ -297,7 +297,7 @@ const ensureBackendReady = async (opts = {}) => {
   const startAll = !!opts.startAll;
   const timeoutMs = Number(opts.timeoutMs || 25000);
 
-  const alreadyPid = await getListeningPidByPort(3000);
+  const alreadyPid = await getListeningPidByPort(48300);
   if (alreadyPid) return { ok: true, alreadyListening: true, pid: alreadyPid };
 
   const backendDir = resolveBackendDir();
@@ -329,7 +329,7 @@ const ensureBackendReady = async (opts = {}) => {
   const ready2 = await waitForApiPort(timeoutMs);
   if (ready2.ok) return { ok: true, ...second, ready: ready2, retried: true };
 
-  return { ok: false, error: 'Backend no respondió en puerto 3000 tras reintento.', first, second, ready, ready2 };
+  return { ok: false, error: 'Backend no respondió en puerto 48300 tras reintento.', first, second, ready, ready2 };
 };
 
 const runBackendAutoStart = async () => {
@@ -449,7 +449,7 @@ const createWindow = async () => {
 
   const isDev = !app.isPackaged;
   if (isDev) {
-    await mainWindow.loadURL('http://localhost:5173');
+    await mainWindow.loadURL('http://localhost:48517');
     mainWindow.webContents.openDevTools({ mode: 'detach' });
   } else {
     await mainWindow.loadFile(path.join(app.getAppPath(), 'dist', 'index.html'));
@@ -511,8 +511,8 @@ app.whenReady().then(async () => {
 
   ipcMain.handle('bankapi:services:status', async () => {
     const backendDir = resolveBackendDir();
-    const apiPid = await getListeningPidByPort(3000);
-    const dbPid = await getListeningPidByPort(5433);
+    const apiPid = await getListeningPidByPort(48300);
+    const dbPid = await getListeningPidByPort(48543);
     return {
       backend: {
         available: !!backendDir,
@@ -521,8 +521,8 @@ app.whenReady().then(async () => {
         backendDir,
       },
       ports: {
-        api3000: { listening: !!apiPid, pid: apiPid },
-        db5433: { listening: !!dbPid, pid: dbPid },
+        api48300: { listening: !!apiPid, pid: apiPid },
+        db48543: { listening: !!dbPid, pid: dbPid },
       },
       autoStart: autoStartState,
     };
